@@ -1,60 +1,52 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
-type Character = {
+type Pelicula = {
   id: number;
-  name: string;
-  img: string;
+  title: string;
+  overview: string;
+  poster_path: string;
 };
 
-export default function HomePage() {
-  const [characters, setCharacters] = useState<Character[]>([]);
+export default function PeliculasPopulares() {
+  const [peliculas, setPeliculas] = useState<Pelicula[]>([]);
 
   useEffect(() => {
-    fetch("/api/characters")
+    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+    const URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-ES`;
+
+    fetch(URL)
       .then((res) => res.json())
       .then((data) => {
-        console.log("Datos de la API:", data);
-
-        const transformed = data.map((char: any) => ({
-          id: char.id,
-          name: char.name,
-          img: `${char.thumbnail.path}.${char.thumbnail.extension}`,
-        }));
-        setCharacters(transformed);
+        console.log("Datos completos:", data);
+        setPeliculas(data.results);
       })
-      .catch((err) => console.error("Error al cargar personajes:", err));
+      .catch((err) => console.error("Error al obtener películas:", err));
   }, []);
 
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1 style={{ textAlign: "center" }}>Personajes de Marvel</h1>
-      <ul
+    <div style={{ padding: "2rem" }}>
+      <h1>Películas Populares</h1>
+      <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-          gap: "1.5rem",
-          listStyle: "none",
-          padding: 0,
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "2rem",
+          marginTop: "2rem",
         }}
       >
-        {characters.map((char) => (
-          <li key={char.id} style={{ textAlign: "center" }}>
+        {peliculas.map((pelicula) => (
+          <div key={pelicula.id} style={{ textAlign: "center" }}>
             <img
-              src={char.img}
-              alt={char.name}
-              style={{
-                width: "100%",
-                borderRadius: "10px",
-                objectFit: "cover",
-              }}
+              src={`https://image.tmdb.org/t/p/w500${pelicula.poster_path}`}
+              alt={pelicula.title}
+              style={{ width: "100%", borderRadius: "10px" }}
             />
-            <p style={{ marginTop: "0.5rem", fontWeight: "bold" }}>
-              {char.name}
-            </p>
-          </li>
+            <h3 style={{ marginTop: "0.5rem" }}>{pelicula.title}</h3>
+          </div>
         ))}
-      </ul>
-    </main>
+      </div>
+    </div>
   );
 }
