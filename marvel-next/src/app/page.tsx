@@ -1,29 +1,30 @@
-"use client"
-import { useEffect, useState } from "react"
+"use client";
+import { useEffect, useState } from "react";
 
 type Character = {
-  id: number
-  name: string
-  img: string
-}
+  id: number;
+  name: string;
+  img: string;
+};
 
 export default function HomePage() {
-  const [characters, setCharacters] = useState<Character[]>([])
+  const [characters, setCharacters] = useState<Character[]>([]);
 
   useEffect(() => {
     fetch("/api/characters")
       .then((res) => res.json())
       .then((data) => {
+        console.log("Datos de la API:", data);
 
         const transformed = data.map((char: any) => ({
           id: char.id,
           name: char.name,
           img: `${char.thumbnail.path}.${char.thumbnail.extension}`,
-        }))
-        setCharacters(transformed)
+        }));
+        setCharacters(transformed);
       })
-      .catch((err) => console.error("Error:", err))
-  }, [])
+      .catch((err) => console.error("Error al cargar personajes:", err));
+  }, []);
 
   return (
     <main style={{ padding: "2rem" }}>
@@ -55,5 +56,5 @@ export default function HomePage() {
         ))}
       </ul>
     </main>
-  )
+  );
 }
