@@ -10,7 +10,7 @@ type Pelicula = {
 };
 
 export default function PeliculasPopulares() {
-  const [peliculas, setPeliculas] = useState<Pelicula[]>([]);
+  const [peliculas, setPeliculas] = useState<Pelicula[] | null>(null);
 
   useEffect(() => {
     const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
@@ -24,6 +24,10 @@ export default function PeliculasPopulares() {
       })
       .catch((err) => console.error("Error al obtener películas:", err));
   }, []);
+
+  if (!peliculas) {
+    return <p>Cargando películas populares...</p>;
+  }
 
   return (
     <div style={{ padding: "2rem" }}>
