@@ -8,6 +8,7 @@ export async function GET() {
     const response = await axios.get(url);
     return Response.json(response.data.results);
   } catch (error) {
+    console.error("Error al obtener películas populares:", error);
     return new Response(
       JSON.stringify({ error: "Error al obtener películas populares" }),
       { status: 500 }
