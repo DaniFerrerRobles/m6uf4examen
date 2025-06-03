@@ -1,3 +1,4 @@
+// app/api/peliculas/route.ts
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -24,7 +25,7 @@ export async function GET() {
 
     const data = await res.json();
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Error al obtener datos del servidor" },
       { status: 500 }
