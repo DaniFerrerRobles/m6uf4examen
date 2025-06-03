@@ -1,17 +1,16 @@
-import axios from "axios";
+// app/api/peliculas/route.ts
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-ES&page=1`;
+  const API_KEY = process.env.TMDB_API_KEY;
+  const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-ES`;
 
   try {
-    const response = await axios.get(url);
-    return Response.json(response.data.results);
+    const res = await fetch(url);
+    const data = await res.json();
+
+    return NextResponse.json(data);
   } catch (error) {
-    console.error("Error al obtener películas populares:", error);
-    return new Response(
-      JSON.stringify({ error: "Error al obtener películas populares" }),
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Error al obtener datos" }, { status: 500 });
   }
 }

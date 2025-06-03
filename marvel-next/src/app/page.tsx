@@ -13,13 +13,10 @@ export default function PeliculasPopulares() {
   const [peliculas, setPeliculas] = useState<Pelicula[] | null>(null);
 
   useEffect(() => {
-    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-    const URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-ES`;
-
-    fetch(URL)
+    fetch("/api/peliculas")
       .then((res) => res.json())
       .then((data) => {
-        console.log("Datos completos:", data);
+        console.log("Películas desde la API:", data);
         setPeliculas(data.results);
       })
       .catch((err) => console.error("Error al obtener películas:", err));
