@@ -13,7 +13,7 @@ export default function PeliculasPopulares() {
   const [peliculas, setPeliculas] = useState<Pelicula[] | null>(null);
 
   useEffect(() => {
-    fetch("/api/peliculas")
+    fetch("/api/characters")
       .then((res) => res.json())
       .then((data) => {
         console.log("Películas desde la API:", data);
